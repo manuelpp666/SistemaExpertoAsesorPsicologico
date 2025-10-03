@@ -31,17 +31,22 @@ def normalizar_sintomas(sintomas):
 
 def procesar_sintomas_semi_libre(texto):
     """Procesa texto semi-libre en síntomas normalizados."""
+    # dividir por comas, punto y coma o punto → cada fragmento es un síntoma
     frases = re.split(r"[.,;]", texto.lower())
     sintomas = []
     sinonimos = cargar_sinonimos()
     for frase in frases:
-        palabras = frase.strip().split()
-        palabras = [p for p in palabras if p not in STOPWORDS]
-        for p in palabras:
-            if p in sinonimos:
-                sintomas.append(sinonimos[p])
-            else:
-                sintomas.append(p)
+        frase = frase.strip()
+        if not frase:
+            continue
+        # eliminar stopwords solo si la frase es una de ellas (no palabra por palabra)
+        if frase in STOPWORDS:
+            continue
+        # aplicar sinonimos si existe
+        if frase in sinonimos:
+            sintomas.append(sinonimos[frase])
+        else:
+            sintomas.append(frase)
     return list(set(sintomas))
 
 # ===== Interfaz Gráfica =====
@@ -101,29 +106,32 @@ class SistemaExpertoApp(tk.Tk):
     def consultar_sintomas(self):
         texto_usuario = self.entry_sintomas.get()
         sintomas_usuario = procesar_sintomas_semi_libre(texto_usuario)
-        recomendacion, sim = razonar(self.base, sintomas_usuario)  # <-- devuelve (Caso, similitud)
+
+        resultado = razonar(self.base, sintomas_usuario)  # puede ser None o (Caso, similitud)
         self.text_resultado.delete(1.0, tk.END)
 
-        if recomendacion:
-            # Nivel de confianza descriptivo
-            if sim >= 0.7:
-                nivel_confianza = "alta"
-            elif sim >= 0.4:
-                nivel_confianza = "moderada"
-            else:
-                nivel_confianza = "muy baja"
+        if resultado is None:
+            self.text_resultado.insert(tk.END, "⚠️ No se encontró un caso similar en la base de conocimiento.")
+            return
 
-            texto = f"Diagnóstico sugerido: {recomendacion.diagnostico}\n"
-            texto += f"Estrategias recomendadas: {', '.join(recomendacion.estrategias)}\n"
-            texto += f"Nivel de confianza: {nivel_confianza}\n\n"
+        recomendacion, sim = resultado  # ahora sí seguro
 
-            exp = ModuloExplicacion(recomendacion, sim)
-            texto += "📖 Explicación:\n" + exp.generar_explicacion(sintomas_usuario)
-
-            self.text_resultado.insert(tk.END, texto)
-
+        # Nivel de confianza descriptivo
+        if sim >= 0.7:
+            nivel_confianza = "alta"
+        elif sim >= 0.4:
+            nivel_confianza = "moderada"
         else:
-            self.text_resultado.insert(tk.END, "⚠️ No se encontró un caso similar.")
+            nivel_confianza = "muy baja"
+
+        texto = f"Diagnóstico sugerido: {recomendacion.diagnostico}\n"
+        texto += f"Estrategias recomendadas: {', '.join(recomendacion.estrategias)}\n"
+        texto += f"Nivel de confianza: {nivel_confianza}\n\n"
+
+        exp = ModuloExplicacion(recomendacion, sim)
+        texto += "📖 Explicación:\n" + exp.generar_explicacion(sintomas_usuario)
+
+        self.text_resultado.insert(tk.END, texto)
     # ===== Psicólogo =====
     def rol_psicologo(self):
         self.limpiar_frame()
