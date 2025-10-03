@@ -6,7 +6,6 @@ from base_conocimiento.almacenamiento import cargar_base, guardar_base
 from base_conocimiento.modelos import Caso
 from motor_inferencia.razonador import razonar
 from modulo_explicacion.explicacion import ModuloExplicacion
-from modulo_adquisicion.adquisicion import ModuloAdquisicion
 
 # ===== Configuración =====
 RUTA_SINONIMOS = "base_conocimiento/sinonimos_ontologia.json"
@@ -56,10 +55,18 @@ class SistemaExpertoApp(tk.Tk):
 
         # Estilo ttk
         style = ttk.Style(self)
-        style.configure("TButton", font=("Segoe UI", 12), padding=6)
+        style.theme_use("clam")  # tema más moderno y personalizable
+        pastel_bg = "#E3F2FD"
+        pastel_btn = "#A5D6A7"
+        pastel_entry = "#FFF9C4"
+
+        style.configure("TButton", font=("Segoe UI", 12), padding=6, background=pastel_btn)
+        style.map("TButton",
+                  background=[("active", "#81C784")],
+                  foreground=[("disabled", "#aaaaaa")])
         style.configure("TLabel", font=("Segoe UI", 12), background="#f0f4f7")
-        style.configure("TEntry", font=("Segoe UI", 12))
-        style.configure("Header.TLabel", font=("Segoe UI", 16, "bold"))
+        style.configure("TEntry", font=("Segoe UI", 12), fieldbackground=pastel_entry)
+        style.configure("Header.TLabel", font=("Segoe UI", 16, "bold"), background="#f0f4f7", foreground="#4E342E")
 
         self.iniciar_interfaz()
 
@@ -85,7 +92,8 @@ class SistemaExpertoApp(tk.Tk):
         self.entry_sintomas.pack(pady=5)
 
         ttk.Button(self, text="Examinar", command=self.consultar_sintomas).pack(pady=10)
-        self.text_resultado = scrolledtext.ScrolledText(self, width=90, height=18, font=("Segoe UI", 11))
+        self.text_resultado = scrolledtext.ScrolledText(self, width=90, height=18, font=("Segoe UI", 11),
+                                                        bg="#FFF3E0", fg="#3E2723")
         self.text_resultado.pack(pady=10)
 
         ttk.Button(self, text="Volver", command=self.iniciar_interfaz).pack(pady=5)
@@ -93,12 +101,10 @@ class SistemaExpertoApp(tk.Tk):
     def consultar_sintomas(self):
         texto_usuario = self.entry_sintomas.get()
         sintomas_usuario = procesar_sintomas_semi_libre(texto_usuario)
-        recomendacion = razonar(self.base, sintomas_usuario)
+        recomendacion, sim = razonar(self.base, sintomas_usuario)  # <-- devuelve (Caso, similitud)
         self.text_resultado.delete(1.0, tk.END)
 
         if recomendacion:
-            sim = recomendacion.get("confianza", 0)  # usar 'confianza' en vez de 'similitud'
-
             # Nivel de confianza descriptivo
             if sim >= 0.7:
                 nivel_confianza = "alta"
@@ -107,41 +113,36 @@ class SistemaExpertoApp(tk.Tk):
             else:
                 nivel_confianza = "muy baja"
 
-            # Si la similitud es 0, no hay diagnóstico confiable
-            if sim == 0:
-                exp = ModuloExplicacion(recomendacion, sim)
-                texto = exp.generar_explicacion(sintomas_usuario)
-            else:
-                texto = f"Diagnóstico sugerido: {recomendacion['diagnostico']}\n"
-                texto += f"Estrategias recomendadas: {', '.join(recomendacion['estrategias'])}\n"
-                texto += f"Nivel de confianza: {nivel_confianza}\n\n"
-                exp = ModuloExplicacion(recomendacion, sim)
-                texto += "📖 Explicación:\n" + exp.generar_explicacion(sintomas_usuario)
+            texto = f"Diagnóstico sugerido: {recomendacion.diagnostico}\n"
+            texto += f"Estrategias recomendadas: {', '.join(recomendacion.estrategias)}\n"
+            texto += f"Nivel de confianza: {nivel_confianza}\n\n"
+
+            exp = ModuloExplicacion(recomendacion, sim)
+            texto += "📖 Explicación:\n" + exp.generar_explicacion(sintomas_usuario)
 
             self.text_resultado.insert(tk.END, texto)
+
         else:
             self.text_resultado.insert(tk.END, "⚠️ No se encontró un caso similar.")
-
     # ===== Psicólogo =====
     def rol_psicologo(self):
         self.limpiar_frame()
         ttk.Label(self, text="Agregar nuevo caso", style="Header.TLabel").pack(pady=10)
 
-        ttk.Label(self, text="Síntomas (coma separados)").pack(pady=3)
-        self.entry_sintomas_ps = ttk.Entry(self, width=90)
-        self.entry_sintomas_ps.pack(pady=5)
+        # Colores suaves y pasteles
+        pastel_entry = "#FFF9C4"
+        labels = ["Síntomas (coma separados)", "Diagnóstico",
+                  "Estrategias (coma separadas)", "Resultado (opcional)"]
+        self.entries_ps = []
 
-        ttk.Label(self, text="Diagnóstico").pack(pady=3)
-        self.entry_diag = ttk.Entry(self, width=90)
-        self.entry_diag.pack(pady=5)
+        for label_text in labels:
+            ttk.Label(self, text=label_text).pack(pady=3)
+            entry = ttk.Entry(self, width=90)
+            entry.pack(pady=5)
+            entry.configure(background=pastel_entry)
+            self.entries_ps.append(entry)
 
-        ttk.Label(self, text="Estrategias (coma separadas)").pack(pady=3)
-        self.entry_estrategias = ttk.Entry(self, width=90)
-        self.entry_estrategias.pack(pady=5)
-
-        ttk.Label(self, text="Resultado (opcional)").pack(pady=3)
-        self.entry_resultado = ttk.Entry(self, width=90)
-        self.entry_resultado.pack(pady=5)
+        self.entry_sintomas_ps, self.entry_diag, self.entry_estrategias, self.entry_resultado = self.entries_ps
 
         ttk.Button(self, text="Agregar caso", command=self.agregar_caso).pack(pady=10)
         ttk.Button(self, text="Volver", command=self.iniciar_interfaz).pack(pady=5)

@@ -1,47 +1,142 @@
 [
     {
         "id_caso": 1,
-        "sintomas": [
-            "insomnio",
-            "preocupación excesiva",
-            "dificultad para concentrarse"
-        ],
+        "sintomas": ["insomnio", "preocupación excesiva", "dificultad para concentrarse"],
         "diagnostico": "ansiedad generalizada",
-        "estrategias": [
-            "psicoeducación",
-            "respiración diafragmática",
-            "restructuración cognitiva"
-        ],
+        "estrategias": ["psicoeducación", "respiración diafragmática", "restructuración cognitiva"],
         "resultado": "mejora significativa en 8 sesiones"
     },
     {
         "id_caso": 2,
-        "sintomas": [
-            "tristeza persistente",
-            "falta de energía",
-            "aislamiento social"
-        ],
+        "sintomas": ["tristeza persistente", "falta de energía", "aislamiento social"],
         "diagnostico": "depresión leve",
-        "estrategias": [
-            "activación conductual",
-            "diario de gratitud",
-            "psicoeducación"
-        ],
+        "estrategias": ["activación conductual", "diario de gratitud", "psicoeducación"],
         "resultado": "mejora parcial en 12 sesiones"
     },
     {
         "id_caso": 3,
-        "sintomas": [
-            "estrés laboral",
-            "dolor de cabeza",
-            "irritabilidad"
-        ],
+        "sintomas": ["estrés laboral", "dolor de cabeza", "irritabilidad"],
         "diagnostico": "estrés agudo",
-        "estrategias": [
-            "técnicas de relajación",
-            "planificación de actividades",
-            "ejercicio físico"
-        ],
+        "estrategias": ["técnicas de relajación", "planificación de actividades", "ejercicio físico"],
         "resultado": "mejora parcial en 5 sesiones"
+    },
+    {
+        "id_caso": 4,
+        "sintomas": ["ataques de pánico recurrentes", "palpitaciones", "miedo a perder el control"],
+        "diagnostico": "trastorno de pánico",
+        "estrategias": ["técnicas de respiración", "exposición gradual", "psicoeducación sobre ansiedad"],
+        "resultado": "reducción significativa de ataques en 10 sesiones"
+    },
+    {
+        "id_caso": 5,
+        "sintomas": ["preocupación por el aspecto físico", "rutinas de limpieza excesivas", "revisión constante del espejo"],
+        "diagnostico": "trastorno obsesivo-compulsivo (TOC)",
+        "estrategias": ["exposición con prevención de respuesta", "psicoeducación sobre TOC", "diario de pensamientos"],
+        "resultado": "reducción de rituales en 12 sesiones"
+    },
+    {
+        "id_caso": 6,
+        "sintomas": ["humor elevado", "insomnio", "habla rápida y saltos de ideas"],
+        "diagnostico": "episodio maníaco leve",
+        "estrategias": ["psicoeducación sobre control de impulsos", "rutinas de sueño", "registro de estado de ánimo"],
+        "resultado": "estabilización del ánimo en 8 sesiones"
+    },
+    {
+        "id_caso": 7,
+        "sintomas": ["evitación de situaciones sociales", "temor intenso a ser juzgado", "taquicardia al interactuar"],
+        "diagnostico": "fobia social",
+        "estrategias": ["exposición gradual", "reestructuración cognitiva", "técnicas de respiración"],
+        "resultado": "mejora significativa en 10 sesiones"
+    },
+    {
+        "id_caso": 8,
+        "sintomas": ["tristeza profunda", "pérdida de interés en actividades", "sentimientos de inutilidad", "fatiga"],
+        "diagnostico": "depresión mayor",
+        "estrategias": ["terapia cognitivo-conductual", "activación conductual", "psicoeducación"],
+        "resultado": "mejora significativa en 14 sesiones"
+    },
+    {
+        "id_caso": 9,
+        "sintomas": ["preocupación constante por la salud", "visitas frecuentes al médico", "ansiedad ante síntomas menores"],
+        "diagnostico": "trastorno de ansiedad por enfermedad",
+        "estrategias": ["psicoeducación sobre interpretación de síntomas", "restructuración cognitiva", "diario de ansiedad"],
+        "resultado": "reducción de visitas médicas excesivas en 12 sesiones"
+    },
+    {
+        "id_caso": 10,
+        "sintomas": ["comportamiento impulsivo", "ira intensa", "relaciones inestables"],
+        "diagnostico": "trastorno límite de la personalidad",
+        "estrategias": ["psicoeducación sobre emociones", "diario emocional", "técnicas de regulación emocional"],
+        "resultado": "mejora en control emocional en 16 sesiones"
+    },
+    {
+        "id_caso": 11,
+        "sintomas": ["preocupación constante por perder peso", "alimentación restrictiva", "ejercicio excesivo"],
+        "diagnostico": "trastorno de anorexia nerviosa",
+        "estrategias": ["psicoeducación nutricional", "registro de alimentación y emociones", "apoyo familiar"],
+        "resultado": "mejora de hábitos alimentarios en 20 sesiones"
+    },
+    {
+        "id_caso": 12,
+        "sintomas": ["episodios de atracones seguidos de purgas", "culpa intensa", "obsesión por el peso"],
+        "diagnostico": "trastorno de bulimia nerviosa",
+        "estrategias": ["psicoeducación sobre alimentación", "terapia cognitivo-conductual", "registro de atracones"],
+        "resultado": "reducción de atracones en 16 sesiones"
+    },
+    {
+        "id_caso": 13,
+        "sintomas": ["sueño interrumpido", "fatiga diurna", "irritabilidad"],
+        "diagnostico": "insomnio crónico",
+        "estrategias": ["higiene del sueño", "técnicas de relajación", "registro de sueño"],
+        "resultado": "mejora del sueño en 8 sesiones"
+    },
+    {
+        "id_caso": 14,
+        "sintomas": ["recuerdos intrusivos de evento traumático", "pesadillas", "hipervigilancia"],
+        "diagnostico": "trastorno de estrés postraumático (TEPT)",
+        "estrategias": ["exposición narrativa", "técnicas de relajación", "psicoeducación sobre trauma"],
+        "resultado": "reducción de síntomas en 12 sesiones"
+    },
+    {
+        "id_caso": 15,
+        "sintomas": ["cambios de humor extremos", "dificultad para mantener empleo", "impulsividad"],
+        "diagnostico": "trastorno bipolar tipo II",
+        "estrategias": ["psicoeducación sobre gestión de emociones", "registro de estados de ánimo", "rutinas de sueño"],
+        "resultado": "estabilización del ánimo en 14 sesiones"
+    },
+    {
+        "id_caso": 16,
+        "sintomas": ["dificultad para controlar impulsos", "agresión ocasional", "sentimientos de aburrimiento crónico"],
+        "diagnostico": "trastorno de control de impulsos",
+        "estrategias": ["técnicas de autocontrol", "diario de impulsos", "psicoeducación"],
+        "resultado": "reducción de episodios impulsivos en 12 sesiones"
+    },
+    {
+        "id_caso": 17,
+        "sintomas": ["fobias específicas a animales", "evitación de lugares", "ansiedad intensa al contacto"],
+        "diagnostico": "fobia específica",
+        "estrategias": ["exposición gradual", "técnicas de relajación", "restructuración cognitiva"],
+        "resultado": "reducción de ansiedad en 8 sesiones"
+    },
+    {
+        "id_caso": 18,
+        "sintomas": ["hiperactividad", "dificultad para concentrarse", "impulsividad"],
+        "diagnostico": "TDAH en adultos",
+        "estrategias": ["organización de tareas", "técnicas de atención plena", "psicoeducación sobre TDAH"],
+        "resultado": "mejora de atención y control impulsivo en 10 sesiones"
+    },
+    {
+        "id_caso": 19,
+        "sintomas": ["preocupación constante por seguridad", "comprobaciones repetitivas", "dificultad para delegar tareas"],
+        "diagnostico": "trastorno obsesivo-compulsivo (TOC) - dimensión de comprobación",
+        "estrategias": ["exposición con prevención de respuesta", "psicoeducación sobre TOC", "registro de compulsiones"],
+        "resultado": "reducción de compulsiones en 14 sesiones"
+    },
+    {
+        "id_caso": 20,
+        "sintomas": ["humor bajo", "pérdida de interés", "fatiga", "dificultad para tomar decisiones"],
+        "diagnostico": "depresión moderada",
+        "estrategias": ["terapia cognitivo-conductual", "activación conductual", "psicoeducación"],
+        "resultado": "mejora significativa en 12 sesiones"
     }
 ]

@@ -1,7 +1,8 @@
 # base_conocimiento/almacenamiento.py
 import json
-from .modelos import Caso, BaseDeCasos
 import os
+from base_conocimiento.modelos import Caso, BaseDeCasos   # ✅ usar import absoluto
+from motor_inferencia.representacion import normalizar_lista
 
 RUTA_ARCHIVO = os.path.join(os.path.dirname(__file__), "casos.json")
 
@@ -16,7 +17,10 @@ def cargar_base(ruta: str = RUTA_ARCHIVO) -> BaseDeCasos:
         with open(ruta, "r", encoding="utf-8") as f:
             data = json.load(f)
             for c in data:
-                base.agregar_caso(Caso.from_dict(c))
+                # ✅ normalizar síntomas al cargar
+                caso = Caso.from_dict(c)
+                caso.sintomas = normalizar_lista(caso.sintomas)
+                base.agregar_caso(caso)
     except FileNotFoundError:
         print("⚠️ No se encontró la base de casos, se creará una nueva.")
     return base

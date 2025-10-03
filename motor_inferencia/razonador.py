@@ -1,7 +1,8 @@
 # motor_inferencia/razonador.py
-from typing import List, Optional, Dict, Tuple
+from typing import List, Optional, Tuple
 from base_conocimiento.modelos import BaseDeCasos, Caso
 from motor_inferencia.similitud import similitud_jaccard
+from motor_inferencia.representacion import normalizar_lista
 
 def recuperar_caso(base: BaseDeCasos, sintomas_usuario: List[str], top_k: int = 1) -> List[Tuple[Caso, float]]:
     """
@@ -16,27 +17,17 @@ def recuperar_caso(base: BaseDeCasos, sintomas_usuario: List[str], top_k: int = 
     similitudes.sort(key=lambda x: x[1], reverse=True)
     return similitudes[:top_k]
 
-def razonar(base: BaseDeCasos, sintomas_usuario: List[str]) -> Optional[Dict]:
+def razonar(base: BaseDeCasos, sintomas_usuario: List[str]) -> Optional[Tuple[Caso, float]]:
     """
-    Recupera el mejor caso y devuelve un diccionario con:
-      - id
-      - sintomas (lista)
-      - diagnostico
-      - estrategias
-      - confianza (similitud)
+    Recupera el mejor caso y devuelve una tupla (Caso, confianza).
     Devuelve None si no hay casos en la base.
     """
+    # ✅ Normalizamos la entrada del usuario antes de buscar
+    sintomas_usuario = normalizar_lista(sintomas_usuario)
+
     candidatos = recuperar_caso(base, sintomas_usuario, top_k=1)
     if not candidatos:
         return None
 
     mejor_caso, score = candidatos[0]
-
-    recomendacion = {
-        "id": mejor_caso.id_caso,
-        "sintomas": mejor_caso.sintomas,       # <<--- importante: incluir síntomas
-        "diagnostico": mejor_caso.diagnostico,
-        "estrategias": mejor_caso.estrategias,
-        "confianza": score
-    }
-    return recomendacion
+    return mejor_caso, score
