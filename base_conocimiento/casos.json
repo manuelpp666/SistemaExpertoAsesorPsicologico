@@ -1,0 +1,47 @@
+[
+    {
+        "id_caso": 1,
+        "sintomas": [
+            "insomnio",
+            "preocupación excesiva",
+            "dificultad para concentrarse"
+        ],
+        "diagnostico": "ansiedad generalizada",
+        "estrategias": [
+            "psicoeducación",
+            "respiración diafragmática",
+            "restructuración cognitiva"
+        ],
+        "resultado": "mejora significativa en 8 sesiones"
+    },
+    {
+        "id_caso": 2,
+        "sintomas": [
+            "tristeza persistente",
+            "falta de energía",
+            "aislamiento social"
+        ],
+        "diagnostico": "depresión leve",
+        "estrategias": [
+            "activación conductual",
+            "diario de gratitud",
+            "psicoeducación"
+        ],
+        "resultado": "mejora parcial en 12 sesiones"
+    },
+    {
+        "id_caso": 3,
+        "sintomas": [
+            "estrés laboral",
+            "dolor de cabeza",
+            "irritabilidad"
+        ],
+        "diagnostico": "estrés agudo",
+        "estrategias": [
+            "técnicas de relajación",
+            "planificación de actividades",
+            "ejercicio físico"
+        ],
+        "resultado": "mejora parcial en 5 sesiones"
+    }
+]
