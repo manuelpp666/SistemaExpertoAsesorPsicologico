@@ -17,7 +17,7 @@ cbr_psicologia/
 │  └─ adquisicion.py                       # Incorporación de nuevos casos (feedback)
 │
 ├─ interfaz_usuario/                       # Interfaz de Usuario
-│  └─ app_streamlit.py                     # Interfaz en Streamlit
+│  └─ ui.py                     # Interfaz en Streamlit
 │
 ├─ pruebas/                                # Pruebas unitarias
 │  ├─ test_similitud.py
