@@ -139,8 +139,15 @@ class SistemaExpertoApp(tk.Tk):
 
         # Colores suaves y pasteles
         pastel_entry = "#FFF9C4"
-        labels = ["Síntomas (coma separados)", "Diagnóstico",
-                  "Estrategias (coma separadas)", "Resultado (opcional)"]
+        labels = [
+            "Síntomas (coma separados)",
+            "Diagnóstico",
+            "Estrategias (coma separadas)",
+            "Resultado (opcional)",
+            "Evaluaciones (coma separadas, opcional)",
+            "Riesgo (bajo/moderado/alto, opcional)",
+            "Derivar a (coma separados, opcional)"
+        ]
         self.entries_ps = []
 
         for label_text in labels:
@@ -150,27 +157,50 @@ class SistemaExpertoApp(tk.Tk):
             entry.configure(background=pastel_entry)
             self.entries_ps.append(entry)
 
-        self.entry_sintomas_ps, self.entry_diag, self.entry_estrategias, self.entry_resultado = self.entries_ps
+        (
+            self.entry_sintomas_ps,
+            self.entry_diag,
+            self.entry_estrategias,
+            self.entry_resultado,
+            self.entry_evaluaciones,
+            self.entry_riesgo,
+            self.entry_derivar
+        ) = self.entries_ps
 
         ttk.Button(self, text="Agregar caso", command=self.agregar_caso).pack(pady=10)
         ttk.Button(self, text="Volver", command=self.iniciar_interfaz).pack(pady=5)
 
     def agregar_caso(self):
+        # Procesar entradas
         sintomas = normalizar_sintomas(self.entry_sintomas_ps.get().split(","))
         diag = self.entry_diag.get()
         est = [e.strip() for e in self.entry_estrategias.get().split(",")]
         res = self.entry_resultado.get() or None
 
+        # Nuevos campos
+        evals = [e.strip() for e in self.entry_evaluaciones.get().split(",")] if self.entry_evaluaciones.get() else []
+        riesgo = self.entry_riesgo.get().strip() if self.entry_riesgo.get() else "desconocido"
+        derivar = [d.strip() for d in self.entry_derivar.get().split(",")] if self.entry_derivar.get() else []
+
+        # Crear caso
         nuevo_caso = Caso(
             id_caso=len(self.base.listar_casos()) + 1,
             sintomas=sintomas,
             diagnostico=diag,
             estrategias=est,
-            resultado=res
+            resultado=res,
+            evaluaciones=evals,
+            riesgo=riesgo,
+            derivar_a=derivar
         )
+
+        # Guardar en la base
         self.base.agregar_caso(nuevo_caso)
         guardar_base(self.base)
+
+        # Mensaje confirmación
         messagebox.showinfo("Éxito", "✅ Caso agregado con éxito.")
+
 
 # ===== Ventana simple de input =====
 def simple_input(prompt):

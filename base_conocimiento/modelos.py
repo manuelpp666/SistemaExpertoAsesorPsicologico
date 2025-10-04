@@ -2,22 +2,17 @@
 from typing import List, Dict
 
 class Caso:
-    def __init__(self, id_caso: int, sintomas: List[str], diagnostico: str, estrategias: List[str], resultado: str = None):
-        """
-        Representa un caso psicológico en la base de conocimiento.
-
-        Args:
-            id_caso (int): Identificador único del caso
-            sintomas (List[str]): Lista de síntomas reportados por el paciente
-            diagnostico (str): Diagnóstico asociado (ej. "ansiedad", "depresión leve")
-            estrategias (List[str]): Técnicas o intervenciones aplicadas
-            resultado (str, opcional): Resultado observado tras la intervención
-        """
+    def __init__(self, id_caso: int, sintomas: List[str], diagnostico: str, estrategias: List[str],
+                 resultado: str = None, evaluaciones: List[str] = None,
+                 riesgo: str = None, derivar_a: List[str] = None):
         self.id_caso = id_caso
         self.sintomas = sintomas
         self.diagnostico = diagnostico
         self.estrategias = estrategias
         self.resultado = resultado
+        self.evaluaciones = evaluaciones or []
+        self.riesgo = riesgo or "desconocido"
+        self.derivar_a = derivar_a or []
 
     def to_dict(self) -> Dict:
         return {
@@ -25,7 +20,10 @@ class Caso:
             "sintomas": self.sintomas,
             "diagnostico": self.diagnostico,
             "estrategias": self.estrategias,
-            "resultado": self.resultado
+            "resultado": self.resultado,
+            "evaluaciones": self.evaluaciones,
+            "riesgo": self.riesgo,
+            "derivar_a": self.derivar_a
         }
 
     @staticmethod
@@ -35,8 +33,12 @@ class Caso:
             sintomas=data["sintomas"],
             diagnostico=data["diagnostico"],
             estrategias=data["estrategias"],
-            resultado=data.get("resultado")
+            resultado=data.get("resultado"),
+            evaluaciones=data.get("evaluaciones", []),
+            riesgo=data.get("riesgo", "desconocido"),
+            derivar_a=data.get("derivar_a", [])
         )
+
 
 
 class BaseDeCasos:

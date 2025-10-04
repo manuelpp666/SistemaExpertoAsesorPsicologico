@@ -16,7 +16,7 @@ def similitud_jaccard(sintomas1: List[str], sintomas2: List[str]) -> float:
 
 def recuperar_caso(base: BaseDeCasos, sintomas_usuario: List[str], top_k: int = 1) -> List[Tuple[Caso, float]]:
     sintomas_usuario = normalizar_lista(sintomas_usuario)
-    print("👉 Síntomas usuario (normalizados):", sintomas_usuario)  # DEBUG
+    
 
     similitudes = []
 

@@ -4,139 +4,199 @@
         "sintomas": ["insomnio", "preocupación excesiva", "dificultad para concentrarse"],
         "diagnostico": "ansiedad generalizada",
         "estrategias": ["psicoeducación", "respiración diafragmática", "restructuración cognitiva"],
-        "resultado": "mejora significativa en 8 sesiones"
+        "resultado": "mejora significativa en 8 sesiones",
+        "evaluaciones": ["GAD-7"],
+        "riesgo": "bajo",
+        "derivar_a": []
     },
     {
         "id_caso": 2,
         "sintomas": ["tristeza persistente", "falta de energía", "aislamiento social"],
         "diagnostico": "depresión leve",
         "estrategias": ["activación conductual", "diario de gratitud", "psicoeducación"],
-        "resultado": "mejora parcial en 12 sesiones"
+        "resultado": "mejora parcial en 12 sesiones",
+        "evaluaciones": ["BDI-II"],
+        "riesgo": "bajo",
+        "derivar_a": []
     },
     {
         "id_caso": 3,
         "sintomas": ["estrés laboral", "dolor de cabeza", "irritabilidad"],
         "diagnostico": "estrés agudo",
         "estrategias": ["técnicas de relajación", "planificación de actividades", "ejercicio físico"],
-        "resultado": "mejora parcial en 5 sesiones"
+        "resultado": "mejora parcial en 5 sesiones",
+        "evaluaciones": [],
+        "riesgo": "bajo",
+        "derivar_a": []
     },
     {
         "id_caso": 4,
-        "sintomas": ["ataques de pánico recurrentes", "palpitaciones", "miedo a perder el control"],
-        "diagnostico": "trastorno de pánico",
-        "estrategias": ["técnicas de respiración", "exposición gradual", "psicoeducación sobre ansiedad"],
-        "resultado": "reducción significativa de ataques en 10 sesiones"
+        "sintomas": ["preocupación constante", "fatiga", "tensión muscular"],
+        "diagnostico": "trastorno de ansiedad generalizada",
+        "estrategias": ["entrenamiento en relajación", "mindfulness", "restructuración cognitiva"],
+        "resultado": "reducción de ansiedad tras 10 sesiones",
+        "evaluaciones": ["GAD-7"],
+        "riesgo": "bajo",
+        "derivar_a": []
     },
     {
         "id_caso": 5,
-        "sintomas": ["preocupación por el aspecto físico", "rutinas de limpieza excesivas", "revisión constante del espejo"],
-        "diagnostico": "trastorno obsesivo-compulsivo (TOC)",
-        "estrategias": ["exposición con prevención de respuesta", "psicoeducación sobre TOC", "diario de pensamientos"],
-        "resultado": "reducción de rituales en 12 sesiones"
+        "sintomas": ["tristeza profunda", "ideas de inutilidad", "llanto frecuente"],
+        "diagnostico": "depresión moderada",
+        "estrategias": ["terapia cognitivo-conductual", "registro de pensamientos", "activación conductual"],
+        "resultado": "avance lento, requiere monitoreo continuo",
+        "evaluaciones": ["BDI-II"],
+        "riesgo": "moderado",
+        "derivar_a": []
     },
     {
         "id_caso": 6,
-        "sintomas": ["humor elevado", "insomnio", "habla rápida y saltos de ideas"],
-        "diagnostico": "episodio maníaco leve",
-        "estrategias": ["psicoeducación sobre control de impulsos", "rutinas de sueño", "registro de estado de ánimo"],
-        "resultado": "estabilización del ánimo en 8 sesiones"
+        "sintomas": ["pesadillas", "recuerdos intrusivos", "hipervigilancia"],
+        "diagnostico": "trastorno de estrés postraumático",
+        "estrategias": ["psicoeducación", "técnicas de grounding", "terapia de exposición gradual"],
+        "resultado": "mejora parcial tras 14 sesiones",
+        "evaluaciones": ["PCL-5"],
+        "riesgo": "moderado",
+        "derivar_a": []
     },
     {
         "id_caso": 7,
-        "sintomas": ["evitación de situaciones sociales", "temor intenso a ser juzgado", "taquicardia al interactuar"],
-        "diagnostico": "fobia social",
-        "estrategias": ["exposición gradual", "reestructuración cognitiva", "técnicas de respiración"],
-        "resultado": "mejora significativa en 10 sesiones"
+        "sintomas": ["rituales repetitivos", "pensamientos obsesivos", "ansiedad intensa"],
+        "diagnostico": "trastorno obsesivo-compulsivo",
+        "estrategias": ["exposición con prevención de respuesta", "reestructuración cognitiva", "psicoeducación"],
+        "resultado": "mejora moderada en 16 sesiones",
+        "evaluaciones": ["Y-BOCS"],
+        "riesgo": "moderado",
+        "derivar_a": ["psiquiatría"]
     },
     {
         "id_caso": 8,
-        "sintomas": ["tristeza profunda", "pérdida de interés en actividades", "sentimientos de inutilidad", "fatiga"],
-        "diagnostico": "depresión mayor",
-        "estrategias": ["terapia cognitivo-conductual", "activación conductual", "psicoeducación"],
-        "resultado": "mejora significativa en 14 sesiones"
+        "sintomas": ["cambio brusco de humor", "hiperactividad", "poca necesidad de dormir"],
+        "diagnostico": "trastorno bipolar tipo I",
+        "estrategias": ["psicoeducación", "registro de estados de ánimo", "técnicas de afrontamiento"],
+        "resultado": "inestabilidad persistente",
+        "evaluaciones": ["MDQ"],
+        "riesgo": "alto",
+        "derivar_a": ["psiquiatría"]
     },
     {
         "id_caso": 9,
-        "sintomas": ["preocupación constante por la salud", "visitas frecuentes al médico", "ansiedad ante síntomas menores"],
-        "diagnostico": "trastorno de ansiedad por enfermedad",
-        "estrategias": ["psicoeducación sobre interpretación de síntomas", "restructuración cognitiva", "diario de ansiedad"],
-        "resultado": "reducción de visitas médicas excesivas en 12 sesiones"
+        "sintomas": ["miedo intenso", "ataques de pánico", "sensación de pérdida de control"],
+        "diagnostico": "trastorno de pánico",
+        "estrategias": ["exposición interoceptiva", "entrenamiento en respiración", "psicoeducación"],
+        "resultado": "reducción de ataques en 8 sesiones",
+        "evaluaciones": ["PDSS"],
+        "riesgo": "moderado",
+        "derivar_a": []
     },
     {
         "id_caso": 10,
-        "sintomas": ["comportamiento impulsivo", "ira intensa", "relaciones inestables"],
-        "diagnostico": "trastorno límite de la personalidad",
-        "estrategias": ["psicoeducación sobre emociones", "diario emocional", "técnicas de regulación emocional"],
-        "resultado": "mejora en control emocional en 16 sesiones"
+        "sintomas": ["rechazo a comer", "pérdida de peso significativa", "miedo a engordar"],
+        "diagnostico": "anorexia nerviosa",
+        "estrategias": ["psicoeducación", "terapia cognitivo-conductual focalizada", "plan nutricional supervisado"],
+        "resultado": "poca adherencia al tratamiento",
+        "evaluaciones": ["EDE-Q"],
+        "riesgo": "alto",
+        "derivar_a": ["psiquiatría"]
     },
     {
         "id_caso": 11,
-        "sintomas": ["preocupación constante por perder peso", "alimentación restrictiva", "ejercicio excesivo"],
-        "diagnostico": "trastorno de anorexia nerviosa",
-        "estrategias": ["psicoeducación nutricional", "registro de alimentación y emociones", "apoyo familiar"],
-        "resultado": "mejora de hábitos alimentarios en 20 sesiones"
+        "sintomas": ["atracones recurrentes", "conductas purgativas", "baja autoestima"],
+        "diagnostico": "bulimia nerviosa",
+        "estrategias": ["psicoeducación", "entrenamiento en regulación emocional", "terapia cognitivo-conductual"],
+        "resultado": "reducción parcial de atracones",
+        "evaluaciones": ["EDE-Q"],
+        "riesgo": "alto",
+        "derivar_a": ["psiquiatría"]
     },
     {
         "id_caso": 12,
-        "sintomas": ["episodios de atracones seguidos de purgas", "culpa intensa", "obsesión por el peso"],
-        "diagnostico": "trastorno de bulimia nerviosa",
-        "estrategias": ["psicoeducación sobre alimentación", "terapia cognitivo-conductual", "registro de atracones"],
-        "resultado": "reducción de atracones en 16 sesiones"
+        "sintomas": ["dificultad para dormir", "despertar frecuente", "cansancio diurno"],
+        "diagnostico": "insomnio crónico",
+        "estrategias": ["higiene del sueño", "restricción del tiempo en cama", "relajación progresiva"],
+        "resultado": "mejora del sueño en 6 semanas",
+        "evaluaciones": ["PSQI"],
+        "riesgo": "bajo",
+        "derivar_a": []
     },
     {
         "id_caso": 13,
-        "sintomas": ["sueño interrumpido", "fatiga diurna", "irritabilidad"],
-        "diagnostico": "insomnio crónico",
-        "estrategias": ["higiene del sueño", "técnicas de relajación", "registro de sueño"],
-        "resultado": "mejora del sueño en 8 sesiones"
+        "sintomas": ["evitación social", "ansiedad al hablar en público", "temor a la evaluación negativa"],
+        "diagnostico": "fobia social",
+        "estrategias": ["exposición gradual", "role playing", "restructuración cognitiva"],
+        "resultado": "mejora significativa tras 10 sesiones",
+        "evaluaciones": ["SPIN"],
+        "riesgo": "moderado",
+        "derivar_a": []
     },
     {
         "id_caso": 14,
-        "sintomas": ["recuerdos intrusivos de evento traumático", "pesadillas", "hipervigilancia"],
-        "diagnostico": "trastorno de estrés postraumático (TEPT)",
-        "estrategias": ["exposición narrativa", "técnicas de relajación", "psicoeducación sobre trauma"],
-        "resultado": "reducción de síntomas en 12 sesiones"
+        "sintomas": ["impulsividad", "relaciones inestables", "ira intensa"],
+        "diagnostico": "trastorno límite de la personalidad",
+        "estrategias": ["terapia dialéctica conductual", "mindfulness", "entrenamiento en regulación emocional"],
+        "resultado": "disminución de conductas impulsivas",
+        "evaluaciones": [],
+        "riesgo": "alto",
+        "derivar_a": ["psiquiatría"]
     },
     {
         "id_caso": 15,
-        "sintomas": ["cambios de humor extremos", "dificultad para mantener empleo", "impulsividad"],
-        "diagnostico": "trastorno bipolar tipo II",
-        "estrategias": ["psicoeducación sobre gestión de emociones", "registro de estados de ánimo", "rutinas de sueño"],
-        "resultado": "estabilización del ánimo en 14 sesiones"
+        "sintomas": ["preocupación por múltiples enfermedades", "visitas frecuentes al médico", "hipervigilancia corporal"],
+        "diagnostico": "trastorno de ansiedad por enfermedad",
+        "estrategias": ["psicoeducación", "exposición", "técnicas de reestructuración cognitiva"],
+        "resultado": "reducción parcial de preocupaciones",
+        "evaluaciones": ["IAS"],
+        "riesgo": "moderado",
+        "derivar_a": []
     },
     {
         "id_caso": 16,
-        "sintomas": ["dificultad para controlar impulsos", "agresión ocasional", "sentimientos de aburrimiento crónico"],
-        "diagnostico": "trastorno de control de impulsos",
-        "estrategias": ["técnicas de autocontrol", "diario de impulsos", "psicoeducación"],
-        "resultado": "reducción de episodios impulsivos en 12 sesiones"
+        "sintomas": ["consumo excesivo de alcohol", "pérdida de control", "síntomas de abstinencia"],
+        "diagnostico": "trastorno por consumo de alcohol",
+        "estrategias": ["psicoeducación", "prevención de recaídas", "grupo de apoyo"],
+        "resultado": "reducción en el consumo",
+        "evaluaciones": ["AUDIT"],
+        "riesgo": "alto",
+        "derivar_a": ["psiquiatría"]
     },
     {
         "id_caso": 17,
-        "sintomas": ["fobias específicas a animales", "evitación de lugares", "ansiedad intensa al contacto"],
-        "diagnostico": "fobia específica",
-        "estrategias": ["exposición gradual", "técnicas de relajación", "restructuración cognitiva"],
-        "resultado": "reducción de ansiedad en 8 sesiones"
+        "sintomas": ["distracción frecuente", "olvidos constantes", "dificultad para organizar tareas"],
+        "diagnostico": "TDAH en adultos",
+        "estrategias": ["entrenamiento en habilidades organizativas", "uso de recordatorios", "técnicas conductuales"],
+        "resultado": "mejora parcial en la productividad",
+        "evaluaciones": ["ASRS"],
+        "riesgo": "moderado",
+        "derivar_a": []
     },
     {
         "id_caso": 18,
-        "sintomas": ["hiperactividad", "dificultad para concentrarse", "impulsividad"],
-        "diagnostico": "TDAH en adultos",
-        "estrategias": ["organización de tareas", "técnicas de atención plena", "psicoeducación sobre TDAH"],
-        "resultado": "mejora de atención y control impulsivo en 10 sesiones"
+        "sintomas": ["temor excesivo a espacios abiertos", "dificultad para salir solo", "ansiedad anticipatoria"],
+        "diagnostico": "agorafobia",
+        "estrategias": ["exposición gradual en vivo", "técnicas de relajación", "psicoeducación"],
+        "resultado": "mejora en la movilidad tras 8 sesiones",
+        "evaluaciones": ["MIA"],
+        "riesgo": "moderado",
+        "derivar_a": []
     },
     {
         "id_caso": 19,
-        "sintomas": ["preocupación constante por seguridad", "comprobaciones repetitivas", "dificultad para delegar tareas"],
-        "diagnostico": "trastorno obsesivo-compulsivo (TOC) - dimensión de comprobación",
-        "estrategias": ["exposición con prevención de respuesta", "psicoeducación sobre TOC", "registro de compulsiones"],
-        "resultado": "reducción de compulsiones en 14 sesiones"
+        "sintomas": ["preocupación por apariencia", "conductas de verificación en espejo", "evitación social"],
+        "diagnostico": "trastorno dismórfico corporal",
+        "estrategias": ["restructuración cognitiva", "exposición con prevención de respuesta", "psicoeducación"],
+        "resultado": "reducción parcial de la preocupación estética",
+        "evaluaciones": ["BDD-YBOCS"],
+        "riesgo": "moderado",
+        "derivar_a": []
     },
     {
         "id_caso": 20,
-        "sintomas": ["humor bajo", "pérdida de interés", "fatiga", "dificultad para tomar decisiones"],
-        "diagnostico": "depresión moderada",
-        "estrategias": ["terapia cognitivo-conductual", "activación conductual", "psicoeducación"],
-        "resultado": "mejora significativa en 12 sesiones"
+        "sintomas": ["duelo prolongado", "tristeza intensa", "dificultad para aceptar la pérdida"],
+        "diagnostico": "trastorno de duelo complicado",
+        "estrategias": ["psicoterapia de duelo", "narrativa de la pérdida", "ejercicios de resignificación"],
+        "resultado": "aceptación parcial tras 12 sesiones",
+        "evaluaciones": ["ICG"],
+        "riesgo": "moderado",
+        "derivar_a": []
     }
 ]
