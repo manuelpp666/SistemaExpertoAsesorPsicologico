@@ -23,30 +23,19 @@ def normalizar_sintomas(sintomas):
     normalizados = []
     for s in sintomas:
         s = s.strip().lower()
-        if s in sinonimos:
-            normalizados.append(sinonimos[s])
-        else:
-            normalizados.append(s)
+        normalizados.append(sinonimos.get(s, s))
     return normalizados
 
 def procesar_sintomas_semi_libre(texto):
     """Procesa texto semi-libre en síntomas normalizados."""
-    # dividir por comas, punto y coma o punto → cada fragmento es un síntoma
     frases = re.split(r"[.,;]", texto.lower())
     sintomas = []
     sinonimos = cargar_sinonimos()
     for frase in frases:
         frase = frase.strip()
-        if not frase:
+        if not frase or frase in STOPWORDS:
             continue
-        # eliminar stopwords solo si la frase es una de ellas (no palabra por palabra)
-        if frase in STOPWORDS:
-            continue
-        # aplicar sinonimos si existe
-        if frase in sinonimos:
-            sintomas.append(sinonimos[frase])
-        else:
-            sintomas.append(frase)
+        sintomas.append(sinonimos.get(frase, frase))
     return list(set(sintomas))
 
 # ===== Interfaz Gráfica =====
@@ -54,173 +43,209 @@ class SistemaExpertoApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("🧠 Sistema Experto de Asesoría Psicológica")
-        self.geometry("750x550")
+        self.geometry("780x580")
         self.configure(bg="#f0f4f7")
         self.base = cargar_base()
 
-        # Estilo ttk
+        # Estilos
         style = ttk.Style(self)
-        style.theme_use("clam")  # tema más moderno y personalizable
-        pastel_bg = "#E3F2FD"
-        pastel_btn = "#A5D6A7"
-        pastel_entry = "#FFF9C4"
-
-        style.configure("TButton", font=("Segoe UI", 12), padding=6, background=pastel_btn)
+        style.theme_use("clam")
+        style.configure("TButton", font=("Segoe UI", 12), padding=6, background="#A5D6A7")
         style.map("TButton",
                   background=[("active", "#81C784")],
                   foreground=[("disabled", "#aaaaaa")])
         style.configure("TLabel", font=("Segoe UI", 12), background="#f0f4f7")
-        style.configure("TEntry", font=("Segoe UI", 12), fieldbackground=pastel_entry)
         style.configure("Header.TLabel", font=("Segoe UI", 16, "bold"), background="#f0f4f7", foreground="#4E342E")
 
         self.iniciar_interfaz()
-
-    def iniciar_interfaz(self):
-        self.limpiar_frame()
-        self.frame_rol = tk.Frame(self, bg="#f0f4f7")
-        self.frame_rol.pack(pady=60)
-
-        ttk.Label(self.frame_rol, text="¿Quién eres?", style="Header.TLabel").pack(pady=10)
-        ttk.Button(self.frame_rol, text="Paciente", width=25, command=self.rol_paciente).pack(pady=5)
-        ttk.Button(self.frame_rol, text="Psicólogo", width=25, command=self.rol_psicologo).pack(pady=5)
 
     def limpiar_frame(self):
         for widget in self.winfo_children():
             widget.destroy()
 
-    # ===== Paciente =====
+    # ===== Pantalla inicial =====
+    def iniciar_interfaz(self):
+        self.limpiar_frame()
+        frame = tk.Frame(self, bg="#f0f4f7")
+        frame.pack(pady=60)
+
+        ttk.Label(frame, text="¿Quién eres?", style="Header.TLabel").pack(pady=10)
+        ttk.Button(frame, text="Paciente", width=25, command=self.rol_paciente).pack(pady=5)
+        ttk.Button(frame, text="Psicólogo", width=25, command=self.rol_psicologo).pack(pady=5)
+
+    # ===== PACIENTE =====
     def rol_paciente(self):
         self.limpiar_frame()
-        ttk.Label(self, text="Describa sus síntomas (frases cortas, puede usar puntos o punto y coma):",
+        ttk.Label(self, text="Describa sus síntomas (use comas, puntos o punto y coma):",
                   font=("Segoe UI", 14)).pack(pady=10)
+
         self.entry_sintomas = ttk.Entry(self, width=90)
         self.entry_sintomas.pack(pady=5)
 
         ttk.Button(self, text="Examinar", command=self.consultar_sintomas).pack(pady=10)
-        self.text_resultado = scrolledtext.ScrolledText(self, width=90, height=18, font=("Segoe UI", 11),
+        self.text_resultado = scrolledtext.ScrolledText(self, width=90, height=20, font=("Segoe UI", 11),
                                                         bg="#FFF3E0", fg="#3E2723")
         self.text_resultado.pack(pady=10)
-
         ttk.Button(self, text="Volver", command=self.iniciar_interfaz).pack(pady=5)
 
     def consultar_sintomas(self):
-        texto_usuario = self.entry_sintomas.get()
+        texto_usuario = self.entry_sintomas.get().strip()
         sintomas_usuario = procesar_sintomas_semi_libre(texto_usuario)
-
-        resultado = razonar(self.base, sintomas_usuario)  # puede ser None o (Caso, similitud)
         self.text_resultado.delete(1.0, tk.END)
 
+        if not sintomas_usuario:
+            messagebox.showwarning("⚠️ Advertencia", "Por favor, ingrese al menos un síntoma.")
+            return
+
+        # Caso 1: Solo un síntoma → hacer preguntas emergentes
+        if len(sintomas_usuario) == 1:
+            sintoma = sintomas_usuario[0]
+            casos_relacionados = [c for c in self.base.listar_casos() if sintoma in c.sintomas]
+
+            if len(casos_relacionados) > 1:
+                messagebox.showinfo(
+                    "🤔 Información insuficiente",
+                    "Me has dado poca información. Te preguntaré algo para darte una mejor respuesta."
+                )
+
+                for caso in casos_relacionados:
+                    otros = [s for s in caso.sintomas if s != sintoma]
+                    if not otros:
+                        continue
+                    pregunta = f"¿Tienes también {otros[0]}?"
+                    respuesta = messagebox.askyesno("Confirmación", pregunta)
+                    if respuesta:
+                        return self.mostrar_resultado(caso, sintomas_usuario)
+                messagebox.showinfo(
+                    "⚠️ Sin coincidencia exacta",
+                    "No se pudo determinar un caso específico con la información proporcionada."
+                )
+                return
+
+        # Caso 2: Varios síntomas → usar razonador
+        resultado = razonar(self.base, sintomas_usuario)
+
+        # Manejo flexible del resultado
         if resultado is None:
             self.text_resultado.insert(tk.END, "⚠️ No se encontró un caso similar en la base de conocimiento.")
             return
 
-        recomendacion, sim = resultado  # ahora sí seguro
-
-        # Nivel de confianza descriptivo
-        if sim >= 0.7:
-            nivel_confianza = "alta"
-        elif sim >= 0.4:
-            nivel_confianza = "moderada"
+        if isinstance(resultado, tuple):
+            if len(resultado) == 2:
+                caso, sim = resultado
+            elif len(resultado) > 2:
+                caso, sim = resultado[0], resultado[1]
+            else:
+                messagebox.showerror("❌ Error", f"Resultado inesperado del razonador: {resultado}")
+                return
         else:
-            nivel_confianza = "muy baja"
+            messagebox.showerror("❌ Error", f"El razonador devolvió un tipo inesperado: {type(resultado)}")
+            return
 
-        texto = f"Diagnóstico sugerido: {recomendacion.diagnostico}\n"
-        texto += f"Estrategias recomendadas: {', '.join(recomendacion.estrategias)}\n"
-        texto += f"Nivel de confianza: {nivel_confianza}\n\n"
+        self.mostrar_resultado(caso, sintomas_usuario, sim)
 
-        exp = ModuloExplicacion(recomendacion, sim)
+    def mostrar_resultado(self, caso, sintomas_usuario, sim=None):
+        """Muestra en pantalla los resultados y explicación."""
+        if sim is None:
+            sim = 1.0  # Para casos confirmados por preguntas
+
+        nivel_confianza = (
+            "alta" if sim >= 0.7 else
+            "moderada" if sim >= 0.4 else
+            "baja"
+        )
+
+        posible_causa = getattr(caso, "posible_causa", "No especificada")
+        estrategias = getattr(caso, "estrategias", [])
+        recomendacion = getattr(caso, "recomendacion_general", "Mantener rutinas saludables")
+        autoevals = getattr(caso, "autoevaluaciones_sugeridas", [])
+        riesgo = getattr(caso, "riesgo", "no definido")
+
+        texto = f"🩺 Posible causa: {posible_causa}\n"
+        texto += f"💡 Estrategias sugeridas: {', '.join(estrategias) if estrategias else 'No especificadas'}\n"
+        texto += f"🧘 Recomendación general: {recomendacion}\n"
+        texto += f"🧾 Autoevaluaciones sugeridas: {', '.join(autoevals) if autoevals else 'No especificadas'}\n"
+        texto += f"🔎 Nivel de riesgo: {riesgo}\n"
+        texto += f"📊 Nivel de confianza: {nivel_confianza}\n\n"
+
+        exp = ModuloExplicacion(caso, sim)
         texto += "📖 Explicación:\n" + exp.generar_explicacion(sintomas_usuario)
 
+        posibles = [c for c in self.base.listar_casos() if c.id_caso != caso.id_caso and any(s in c.sintomas for s in sintomas_usuario)]
+        if posibles:
+            texto += "\n⚠️ También podría estar relacionado con otros casos similares:\n"
+            for otro in posibles[:2]:
+                texto += f"  - {getattr(otro, 'posible_causa', 'Causa no especificada')}\n"
+
+        self.text_resultado.delete(1.0, tk.END)
         self.text_resultado.insert(tk.END, texto)
-    # ===== Psicólogo =====
+
+    # ===== PSICÓLOGO =====
     def rol_psicologo(self):
         self.limpiar_frame()
-        ttk.Label(self, text="Agregar nuevo caso", style="Header.TLabel").pack(pady=10)
+        ttk.Label(self, text="Agregar nuevo caso a la base de conocimiento", style="Header.TLabel").pack(pady=10)
 
-        # Colores suaves y pasteles
-        pastel_entry = "#FFF9C4"
-        labels = [
+        campos = [
             "Síntomas (coma separados)",
-            "Diagnóstico",
+            "Posible causa",
             "Estrategias (coma separadas)",
             "Resultado (opcional)",
-            "Evaluaciones (coma separadas, opcional)",
+            "Autoevaluaciones sugeridas (coma separadas, opcional)",
             "Riesgo (bajo/moderado/alto, opcional)",
-            "Derivar a (coma separados, opcional)"
+            "Derivar a (coma separadas, opcional)",
+            "Recomendación general"
         ]
         self.entries_ps = []
 
-        for label_text in labels:
-            ttk.Label(self, text=label_text).pack(pady=3)
+        for texto in campos:
+            ttk.Label(self, text=texto).pack(pady=3)
             entry = ttk.Entry(self, width=90)
             entry.pack(pady=5)
-            entry.configure(background=pastel_entry)
             self.entries_ps.append(entry)
 
         (
-            self.entry_sintomas_ps,
-            self.entry_diag,
+            self.entry_sintomas,
+            self.entry_causa,
             self.entry_estrategias,
             self.entry_resultado,
-            self.entry_evaluaciones,
+            self.entry_autoevals,
             self.entry_riesgo,
-            self.entry_derivar
+            self.entry_derivar,
+            self.entry_recomendacion
         ) = self.entries_ps
 
-        ttk.Button(self, text="Agregar caso", command=self.agregar_caso).pack(pady=10)
+        ttk.Button(self, text="Guardar caso", command=self.agregar_caso).pack(pady=10)
         ttk.Button(self, text="Volver", command=self.iniciar_interfaz).pack(pady=5)
 
     def agregar_caso(self):
-        # Procesar entradas
-        sintomas = normalizar_sintomas(self.entry_sintomas_ps.get().split(","))
-        diag = self.entry_diag.get()
-        est = [e.strip() for e in self.entry_estrategias.get().split(",")]
-        res = self.entry_resultado.get() or None
+        sintomas = normalizar_sintomas(self.entry_sintomas.get().split(","))
+        causa = self.entry_causa.get()
+        estrategias = [e.strip() for e in self.entry_estrategias.get().split(",") if e.strip()]
+        resultado = self.entry_resultado.get() or "No especificado"
+        autoevals = [a.strip() for a in self.entry_autoevals.get().split(",") if a.strip()]
+        riesgo = self.entry_riesgo.get() or "bajo"
+        derivar_a = [d.strip() for d in self.entry_derivar.get().split(",") if d.strip()]
+        recomendacion = self.entry_recomendacion.get() or "mantener rutinas saludables"
 
-        # Nuevos campos
-        evals = [e.strip() for e in self.entry_evaluaciones.get().split(",")] if self.entry_evaluaciones.get() else []
-        riesgo = self.entry_riesgo.get().strip() if self.entry_riesgo.get() else "desconocido"
-        derivar = [d.strip() for d in self.entry_derivar.get().split(",")] if self.entry_derivar.get() else []
-
-        # Crear caso
         nuevo_caso = Caso(
             id_caso=len(self.base.listar_casos()) + 1,
             sintomas=sintomas,
-            diagnostico=diag,
-            estrategias=est,
-            resultado=res,
-            evaluaciones=evals,
+            posible_causa=causa,
+            estrategias=estrategias,
+            resultado=resultado,
+            autoevaluaciones_sugeridas=autoevals,
             riesgo=riesgo,
-            derivar_a=derivar
+            derivar_a=derivar_a,
+            recomendacion_general=recomendacion
         )
 
-        # Guardar en la base
         self.base.agregar_caso(nuevo_caso)
         guardar_base(self.base)
+        messagebox.showinfo("✅ Éxito", "Caso agregado correctamente a la base de conocimiento.")
+        self.iniciar_interfaz()
 
-        # Mensaje confirmación
-        messagebox.showinfo("Éxito", "✅ Caso agregado con éxito.")
 
-
-# ===== Ventana simple de input =====
-def simple_input(prompt):
-    win = tk.Toplevel()
-    win.title(prompt)
-    win.configure(bg="#f0f4f7")
-    ttk.Label(win, text=prompt, font=("Segoe UI", 12)).pack(pady=5)
-    entry = ttk.Entry(win, width=50)
-    entry.pack(pady=5)
-    result = []
-
-    def ok():
-        result.append(entry.get())
-        win.destroy()
-
-    ttk.Button(win, text="Aceptar", command=ok).pack(pady=5)
-    win.wait_window()
-    return result[0] if result else ""
-
-# ===== Main =====
+# ===== MAIN =====
 if __name__ == "__main__":
     app = SistemaExpertoApp()
     app.mainloop()
