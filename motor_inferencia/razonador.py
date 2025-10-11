@@ -37,7 +37,7 @@ def recuperar_caso(base: BaseDeCasos, sintomas_usuario: List[str]) -> List[Tuple
     for caso in base.listar_casos():
         sintomas_caso = normalizar_lista(caso.sintomas)
         score = similitud_jaccard(sintomas_usuario, sintomas_caso)
-        print(f"[DEBUG] Caso {caso.id_caso} → similitud={score:.2f} | causa={caso.posible_causa}")
+        
         similitudes.append((caso, score))
 
     similitudes.sort(key=lambda x: x[1], reverse=True)
