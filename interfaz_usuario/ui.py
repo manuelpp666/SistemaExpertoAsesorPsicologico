@@ -2,17 +2,22 @@ import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 import json
 import re
+from difflib import SequenceMatcher
+
 from base_conocimiento.almacenamiento import cargar_base, guardar_base
 from base_conocimiento.modelos import Caso
 from motor_inferencia.razonador import razonar
 from modulo_explicacion.explicacion import ModuloExplicacion
+from motor_inferencia.semantic_helper import buscar_equivalente_semantico
 
-# ===== Configuración =====
-RUTA_SINONIMOS = "base_conocimiento/sinonimos_ontologia.json"
-STOPWORDS = {"tengo", "me", "siento", "y", "a veces", "muy", "con", "el", "la", "los", "las"}
+# ===== CONFIGURACIÓN GLOBAL =====
+RUTA_SINONIMOS = "base_conocimiento/sinonimos_ontologia_enriquecido.json"
+STOPWORDS = {"tengo", "me", "siento", "y", "a veces", "muy", "con", "el", "la", "los", "las", "de", "en", "por"}
 
 
+# ===== UTILIDADES DE PROCESAMIENTO =====
 def cargar_sinonimos(ruta=RUTA_SINONIMOS):
+    """Carga el archivo JSON de sinónimos."""
     try:
         with open(ruta, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -20,7 +25,23 @@ def cargar_sinonimos(ruta=RUTA_SINONIMOS):
         return {}
 
 
+def buscar_sinonimo_aproximado(frase, sinonimos, umbral=0.7):
+    """
+    Busca el sinónimo más parecido a la frase dada.
+    Si la similitud supera el umbral, devuelve el valor del sinónimo.
+    En caso contrario, devuelve la frase original.
+    """
+    frase = frase.lower().strip()
+    mejor, sim_mejor = frase, 0
+    for key, val in sinonimos.items():
+        sim = SequenceMatcher(None, frase, key.lower()).ratio()
+        if sim > sim_mejor and sim >= umbral:
+            mejor, sim_mejor = val, sim
+    return mejor
+
+
 def normalizar_sintomas(sintomas):
+    """Normaliza una lista de síntomas usando el diccionario de sinónimos."""
     sinonimos = cargar_sinonimos()
     return [sinonimos.get(s.strip().lower(), s.strip().lower()) for s in sintomas if s.strip()]
 
@@ -29,14 +50,36 @@ def procesar_sintomas_semi_libre(texto):
     frases = re.split(r"[.,;]", texto.lower())
     sinonimos = cargar_sinonimos()
     sintomas = []
+    base_sintomas = list(sinonimos.values())  # para comparación semántica
+
     for frase in frases:
         frase = frase.strip()
-        if frase and frase not in STOPWORDS:
-            sintomas.append(sinonimos.get(frase, frase))
+        if not frase or frase in STOPWORDS:
+            continue
+
+        # 1️⃣ Exacta
+        if frase in sinonimos:
+            sintomas.append(sinonimos[frase])
+            continue
+
+        # 2️⃣ Difusa (ya la tienes con buscar_sinonimo_aproximado)
+        aproximado = buscar_sinonimo_aproximado(frase, sinonimos, umbral=0.7)
+        if aproximado != frase:
+            sintomas.append(aproximado)
+            continue
+
+        # 3️⃣ Semántica
+        encontrado, sim = buscar_equivalente_semantico(frase, base_sintomas)
+        if encontrado:
+            print(f"🔍 Coincidencia semántica: '{frase}' ≈ '{encontrado}' ({sim:.2f})")
+            sintomas.append(encontrado)
+        else:
+            sintomas.append(frase)  # mantener texto original
+
     return list(set(sintomas))
 
 
-# ===== Interfaz =====
+# ===== INTERFAZ PRINCIPAL =====
 class SistemaExpertoApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -56,8 +99,7 @@ class SistemaExpertoApp(tk.Tk):
                         background="#3B82F6",
                         borderwidth=0,
                         padding=(10, 6))
-        style.map("TButton",
-                  background=[("active", "#2563EB")])
+        style.map("TButton", background=[("active", "#2563EB")])
 
         style.configure("TLabel", font=("Segoe UI", 12), background="#F9FAFB", foreground="#1F2937")
         style.configure("Header.TLabel",
@@ -71,10 +113,11 @@ class SistemaExpertoApp(tk.Tk):
         self.iniciar_interfaz()
 
     def limpiar_frame(self):
+        """Elimina widgets actuales de la ventana."""
         for widget in self.winfo_children():
             widget.destroy()
 
-    # ===== Pantalla inicial =====
+    # ===== PANTALLA INICIAL =====
     def iniciar_interfaz(self):
         self.limpiar_frame()
 
@@ -137,9 +180,8 @@ class SistemaExpertoApp(tk.Tk):
             command=self.iniciar_interfaz
         ).pack(ipadx=12, ipady=6)
 
-
-
     def consultar_sintomas(self):
+        """Analiza los síntomas ingresados por el paciente."""
         texto_usuario = self.entry_sintomas.get().strip()
         sintomas_usuario = procesar_sintomas_semi_libre(texto_usuario)
         self.text_resultado.delete(1.0, tk.END)
@@ -184,6 +226,7 @@ class SistemaExpertoApp(tk.Tk):
             messagebox.showerror("Error", "El razonador devolvió un resultado inesperado.")
 
     def mostrar_resultado(self, caso, sintomas_usuario, sim=None):
+        """Muestra el caso más similar y su explicación."""
         sim = sim or 1.0
         nivel_confianza = "alta" if sim >= 0.7 else "moderada" if sim >= 0.4 else "baja"
 
@@ -213,6 +256,7 @@ class SistemaExpertoApp(tk.Tk):
 
     # ===== PSICÓLOGO =====
     def rol_psicologo(self):
+        """Pantalla para que el psicólogo agregue nuevos casos."""
         self.limpiar_frame()
         frame = ttk.Frame(self)
         frame.pack(pady=20)
@@ -252,6 +296,7 @@ class SistemaExpertoApp(tk.Tk):
         ttk.Button(frame, text="⬅ Volver", command=self.iniciar_interfaz).pack()
 
     def agregar_caso(self):
+        """Agrega un nuevo caso a la base de conocimiento."""
         sintomas = normalizar_sintomas(self.entry_sintomas.get().split(","))
         causa = self.entry_causa.get()
         estrategias = [e.strip() for e in self.entry_estrategias.get().split(",") if e.strip()]
@@ -279,6 +324,7 @@ class SistemaExpertoApp(tk.Tk):
         self.iniciar_interfaz()
 
 
+# ===== EJECUCIÓN =====
 if __name__ == "__main__":
     app = SistemaExpertoApp()
     app.mainloop()

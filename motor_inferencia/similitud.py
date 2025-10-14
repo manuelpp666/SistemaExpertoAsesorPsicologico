@@ -8,7 +8,7 @@ def similitud_jaccard(lista1: List[str], lista2: List[str]) -> float:
     - Normaliza ambas listas (minúsculas, sin espacios extra, etc.).
     - Compara como conjuntos (el orden no importa).
     """
-    # ✅ Normalizamos antes de comparar
+    # Normalizamos antes de comparar
     set1 = set(normalizar_lista(lista1))
     set2 = set(normalizar_lista(lista2))
 
