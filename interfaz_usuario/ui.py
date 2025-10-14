@@ -69,11 +69,13 @@ def procesar_sintomas_semi_libre(texto):
             continue
 
         # 3️⃣ Semántica
-        encontrado, sim = buscar_equivalente_semantico(frase, base_sintomas)
-        if encontrado:
-            print(f"🔍 Coincidencia semántica: '{frase}' ≈ '{encontrado}' ({sim:.2f})")
-            sintomas.append(encontrado)
+        coincidencias = buscar_equivalente_semantico(frase, umbral=0.5)
+        if coincidencias:
+            for _, encontrado, sim in coincidencias:
+                print(f"[SEMANTIC LOG] Coincidencia semántica: '{frase}' → '{encontrado}' (sim={sim:.2f})")
+                sintomas.append(encontrado)
         else:
+            print(f"[SEMANTIC LOG] Sin coincidencia semántica para: '{frase}'")
             sintomas.append(frase)  # mantener texto original
 
     return list(set(sintomas))
