@@ -87,14 +87,14 @@ def buscar_equivalente_semantico(frase: str, umbral: float = _DEFAULT_THRESHOLD)
     for parte in partes:
         parte_norm = preprocesar_texto(parte)
 
-        # 1️⃣ Coincidencia exacta con sinónimos
+        # Coincidencia exacta con sinónimos
         canonico = normalizar_sinonimos(parte_norm)
         if canonico != parte_norm:
             print(f"[SEMANTIC LOG] Exacto: '{parte}' → '{canonico}'")
             coincidencias.append((parte, canonico, 1.0))
             continue
 
-        # 2️⃣ Coincidencia difusa con sinónimos
+        # Coincidencia difusa con sinónimos
         difuso = buscar_sinonimo_difuso(parte_norm, lista_claves, umbral)
         if difuso:
             canonico = SINONIMOS[difuso]
@@ -102,7 +102,7 @@ def buscar_equivalente_semantico(frase: str, umbral: float = _DEFAULT_THRESHOLD)
             coincidencias.append((parte, canonico, umbral))
             continue
 
-        # 3️⃣ Coincidencia léxica con síntomas de casos
+        # Coincidencia léxica con síntomas de casos
         mejor_sintoma = None
         mejor_sim = 0.0
         for sintoma in sintomas_base:

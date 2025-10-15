@@ -8,15 +8,12 @@ SISTEMAEXPERTO/
 │
 ├─ motor_inferencia/                       # Motor de Inferencia (Razonamiento CBR)
 │  ├─ representacion.py                    # Normalización y vectorización de síntomas
-│  ├─ similitud.py                         # Métricas de similitud (Jaccard)
 │  └─ razonador.py                         # Permite analizar y recuperar los casos con mayor similitud(razonar)
 │  └─ semantic_helper.py                   # Mejora de la interpretación de los síntomas que el paciente ingresa
 │
 ├─ modulo_explicacion/                     # Módulo de Explicación
 │  └─ explicacion.py                       # Justificación de las recomendaciones con su respectiva explicación
 │
-├─ modulo_adquisicion/                     # Módulo de Adquisición del Conocimiento
-│  └─ adquisicion.py                       # Incorporación de nuevos casos 
 │
 ├─ interfaz_usuario/                       # Interfaz de Usuario
 │  └─ ui.py                                # Interfaz en Tkinter
@@ -24,3 +21,4 @@ SISTEMAEXPERTO/
 │
 │
 └─ README.md                               # Documentación del proyecto
+

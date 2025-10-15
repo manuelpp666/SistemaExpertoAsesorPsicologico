@@ -57,18 +57,18 @@ def procesar_sintomas_semi_libre(texto):
         if not frase or frase in STOPWORDS:
             continue
 
-        # 1️⃣ Exacta
+        # Exacta
         if frase in sinonimos:
             sintomas.append(sinonimos[frase])
             continue
 
-        # 2️⃣ Difusa (ya la tienes con buscar_sinonimo_aproximado)
+        # Difusa (ya la tienes con buscar_sinonimo_aproximado)
         aproximado = buscar_sinonimo_aproximado(frase, sinonimos, umbral=0.7)
         if aproximado != frase:
             sintomas.append(aproximado)
             continue
 
-        # 3️⃣ Semántica
+        # Semántica
         coincidencias = buscar_equivalente_semantico(frase, umbral=0.5)
         if coincidencias:
             for _, encontrado, sim in coincidencias:
