@@ -1,7 +1,7 @@
 # base_conocimiento/almacenamiento.py
 import json
 import os
-from base_conocimiento.modelos import Caso, BaseDeCasos   # ✅ usar import absoluto
+from base_conocimiento.modelos import Caso, BaseDeCasos   # usar import absoluto
 from motor_inferencia.representacion import normalizar_lista
 
 RUTA_ARCHIVO = os.path.join(os.path.dirname(__file__), "casos.json")

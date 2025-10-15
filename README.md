@@ -1,31 +1,26 @@
-cbr_psicologia/
+SISTEMAEXPERTO/
 ├─ base_conocimiento/                      # Base de Conocimiento
 │  ├─ casos.json                           # Casos iniciales
 │  ├─ sinonimos_ontologia.json             # Ontología y sinónimos
+│  ├─ sinonimos_ontologia_enriquecido.json # Los sinónimos extendidos que derivan de los sinonimos_ontologia
 │  ├─ modelos.py                           # Definición de Caso y BaseDeCasos
 │  └─ almacenamiento.py                    # Guardado y carga
 │
 ├─ motor_inferencia/                       # Motor de Inferencia (Razonamiento CBR)
 │  ├─ representacion.py                    # Normalización y vectorización de síntomas
-│  ├─ similitud.py                         # Métricas de similitud (Jaccard, Coseno, etc.)
-│  └─ razonador.py                         # Implementación de las 4R (Recuperar, Reutilizar, Revisar, Retener)
+│  ├─ similitud.py                         # Métricas de similitud (Jaccard)
+│  └─ razonador.py                         # Permite analizar y recuperar los casos con mayor similitud(razonar)
+│  └─ semantic_helper.py                   # Mejora de la interpretación de los síntomas que el paciente ingresa
 │
 ├─ modulo_explicacion/                     # Módulo de Explicación
-│  └─ explicacion.py                       # Justificación de las recomendaciones
+│  └─ explicacion.py                       # Justificación de las recomendaciones con su respectiva explicación
 │
 ├─ modulo_adquisicion/                     # Módulo de Adquisición del Conocimiento
-│  └─ adquisicion.py                       # Incorporación de nuevos casos (feedback)
+│  └─ adquisicion.py                       # Incorporación de nuevos casos 
 │
 ├─ interfaz_usuario/                       # Interfaz de Usuario
-│  └─ ui.py                     # Interfaz en Streamlit
+│  └─ ui.py                                # Interfaz en Tkinter
 │
-├─ pruebas/                                # Pruebas unitarias
-│  ├─ test_similitud.py
-│  ├─ test_razonador.py
-│  └─ test_explicacion.py
 │
-├─ utils/                                  # Utilidades generales
-│  └─ helpers.py                           # Validaciones, logs, funciones de apoyo
 │
-├─ requirements.txt                        # Dependencias
 └─ README.md                               # Documentación del proyecto
