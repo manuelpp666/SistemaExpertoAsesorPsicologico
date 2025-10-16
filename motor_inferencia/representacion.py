@@ -26,5 +26,12 @@ def normalizar_texto(texto: str) -> str:
 def normalizar_lista(sintomas: List[str]) -> List[str]:
     """
     Normaliza una lista de síntomas manteniendo frases.
+    Evita errores si hay valores None o vacíos.
     """
-    return [normalizar_texto(s) for s in sintomas if s.strip()]
+    lista_normalizada = []
+    for s in sintomas:
+        if isinstance(s, str) and s.strip():  # Solo procesar si es string y no está vacío
+            lista_normalizada.append(normalizar_texto(s))
+        elif s is None:
+            print("[WARNING] Valor None detectado en lista de síntomas.")
+    return lista_normalizada
